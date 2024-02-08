@@ -9,6 +9,13 @@ on:
 jobs:
   terraform:
     runs-on: ubuntu-latest
+
+    env: # Set the environment variables for the whole job
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+
     steps:
     - uses: actions/checkout@v4
 
@@ -16,11 +23,6 @@ jobs:
       uses: hashicorp/setup-terraform@v3.0.0
       with:
         terraform_version: 1.1.0
-
-    - name: 'Configure Azure Credentials'
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: 'Terraform Init'
       run: terraform init
