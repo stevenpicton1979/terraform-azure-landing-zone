@@ -1,5 +1,13 @@
 # Configure the Azure provider
 terraform {
+
+  backend "azurerm" {
+    resource_group_name   = "rg-tfstate-prod-australiaeast"
+    storage_account_name  = "tfstateprode001"
+    container_name        = "tfstate"
+    key                   = "terraform.tfstate"
+  }
+
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -15,6 +23,6 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "myTFResourceGroup"
+  name     = "myTFResourceGroup2"
   location = "australiaeast"
 }
