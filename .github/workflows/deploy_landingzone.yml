@@ -18,7 +18,7 @@ jobs:
         terraform_version: 1.1.0
 
     - name: 'Configure Azure Credentials'
-      uses: azure/login@v1.6.1
+      uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
