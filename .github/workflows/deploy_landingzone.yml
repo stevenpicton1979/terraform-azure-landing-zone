@@ -1,0 +1,33 @@
+name: 'DeployLandingZone'
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: 'Setup Terraform'
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.1.0
+
+    - name: 'Configure Azure Credentials'
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: 'Terraform Init'
+      run: terraform init
+
+    - name: 'Terraform Plan'
+      run: terraform plan
+
+    # Use manual approval for Terraform Apply in production environments
+    # - name: 'Terraform Apply'
+    #   run: terraform apply -auto-approve
