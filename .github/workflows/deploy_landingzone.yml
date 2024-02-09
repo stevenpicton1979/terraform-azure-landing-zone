@@ -8,6 +8,7 @@ on:
 
 jobs:
   terraform:
+    if: github.ref != 'refs/heads/feature_fix'
     runs-on: ubuntu-latest
 
     env: # Set the environment variables for the whole job
@@ -29,7 +30,7 @@ jobs:
         if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
           TF_VARS_PATH="environments/dev.tfvars"
           TF_BACKEND_CONFIG_PATH="environments/backend-dev.hcl" 
-        elif [ "${{ github.ref }}" == "refs/heads/feature_fix" ]; then
+        elif [ "${{ github.ref }}" == "refs/heads/test" ]; then
           TF_VARS_PATH="environments/test.tfvars"
           TF_BACKEND_CONFIG_PATH="environments/backend-test.hcl"
         fi
@@ -45,6 +46,30 @@ jobs:
     - name: 'Terraform Apply'
       run: terraform apply -var-file="${{ env.TF_VARS_PATH }}" -auto-approve
 
-    # Use manual approval for Terraform Apply in production environments
-    # - name: 'Terraform Apply'
-    #   run: terraform apply -auto-approve
+  terraform-apply-prod:
+    if: github.ref == 'refs/heads/feature_fix'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: 'Setup Terraform'
+      uses: hashicorp/setup-terraform@v3.0.0
+      with:
+        terraform_version: '1.1.0'
+        
+    - name: 'Set Prod TF_VARS_PATH and TF_BACKEND_CONFIG_PATH' 
+      run: |
+        TF_VARS_PATH="environments/prod.tfvars"
+        TF_BACKEND_CONFIG_PATH="environments/backend-prod.hcl" # Ensure correct backend config path for prod
+        echo "TF_VARS_PATH=$TF_VARS_PATH" >> $GITHUB_ENV
+        echo "TF_BACKEND_CONFIG_PATH=$TF_BACKEND_CONFIG_PATH" >> $GITHUB_ENV
+
+    - name: 'Terraform Init'
+      run: terraform init -backend-config="${{ env.TF_BACKEND_CONFIG_PATH }}" 
+
+    - name: 'Terraform Plan'
+      run: terraform plan -var-file="${{ env.TF_VARS_PATH }}"
+      
+    - name: 'Terraform Apply for Production'
+      run: terraform apply -var-file="${{ env.TF_VARS_PATH }}" -auto-approve
