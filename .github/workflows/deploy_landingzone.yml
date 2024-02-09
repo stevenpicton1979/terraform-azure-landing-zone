@@ -3,7 +3,7 @@ name: 'DeployLandingZone'
 on:
   push:
     branches:
-      - master
+      - feature_fix
   pull_request:
 
 jobs:
