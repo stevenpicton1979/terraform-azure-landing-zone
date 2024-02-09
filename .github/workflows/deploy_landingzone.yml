@@ -11,7 +11,7 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     environment: 
-      name: ${{ github.ref == 'refs/heads/feature_fix' && 'production' || 'default' }}
+      name: ${{ github.ref == 'refs/heads/prod' && 'production' || 'default' }}
 
     env: # Set the environment variables for the whole job
       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
@@ -35,7 +35,7 @@ jobs:
         elif [ "${{ github.ref }}" == "refs/heads/test" ]; then
           TF_VARS_PATH="environments/test.tfvars"
           TF_BACKEND_CONFIG_PATH="environments/backend-test.hcl"
-        elif [ "${{ github.ref }}" == "refs/heads/feature_fix" ]; then
+        elif [ "${{ github.ref }}" == "refs/heads/prod" ]; then
           TF_VARS_PATH="environments/prod.tfvars"
           TF_BACKEND_CONFIG_PATH="environments/backend-prod.hcl"
         fi
