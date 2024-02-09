@@ -34,7 +34,7 @@ jobs:
         echo TF_BACKEND_CONFIG_PATH=$TF_BACKEND_CONFIG_PATH >> $GITHUB_ENV
 
     - name: 'Terraform Init'
-      run: terraform init 
+      run: terraform init -backend-config=${{ env.TF_BACKEND_CONFIG_PATH }}
 
     - name: 'Terraform Plan'
       run: terraform plan -var-file="${{ env.TF_VARS_PATH }}"
