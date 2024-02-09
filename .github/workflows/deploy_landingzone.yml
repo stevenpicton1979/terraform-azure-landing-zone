@@ -29,7 +29,7 @@ jobs:
         if [ "${{ github.ref }}" == "refs/heads/feature_fix" ]; then
           TF_VARS_PATH="environments/dev.tfvars"
         fi
-        echo "TF_VARS_PATH=$TF_VARS_PATH" >> $GITHUB_ENV
+        echo TF_VARS_PATH=$TF_VARS_PATH >> $GITHUB_ENV
 
     - name: 'Terraform Init'
       run: terraform init
