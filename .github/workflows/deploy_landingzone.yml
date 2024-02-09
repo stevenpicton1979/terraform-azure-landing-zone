@@ -60,8 +60,8 @@ jobs:
         
     - name: 'Set Prod TF_VARS_PATH and TF_BACKEND_CONFIG_PATH' 
       run: |
-        TF_VARS_PATH="environments/prod.tfvars"
-        TF_BACKEND_CONFIG_PATH="environments/backend-prod.hcl" # Ensure correct backend config path for prod
+        TF_VARS_PATH="environments/test.tfvars"
+        TF_BACKEND_CONFIG_PATH="environments/backend-test.hcl"
         echo "TF_VARS_PATH=$TF_VARS_PATH" >> $GITHUB_ENV
         echo "TF_BACKEND_CONFIG_PATH=$TF_BACKEND_CONFIG_PATH" >> $GITHUB_ENV
 
@@ -70,6 +70,6 @@ jobs:
 
     - name: 'Terraform Plan'
       run: terraform plan -var-file="${{ env.TF_VARS_PATH }}"
-      
+
     - name: 'Terraform Apply for Production'
       run: terraform apply -var-file="${{ env.TF_VARS_PATH }}" -auto-approve
