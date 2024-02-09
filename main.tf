@@ -23,6 +23,6 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "myTFResourceGroup3"
+  name     = "myTFResourceGroup1"
   location = "australiaeast"
 }
