@@ -9,7 +9,7 @@ on:
 
 jobs:
   terraform:
-    if: github.ref != 'refs/heads/feature_fix'
+    
     runs-on: ubuntu-latest
     environment: 
       name: ${{ github.ref == 'refs/heads/feature_fix' && 'production' || 'default' }}
