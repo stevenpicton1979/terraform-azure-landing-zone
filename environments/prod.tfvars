@@ -1,1 +1,1 @@
-resource_group_name = "prod-resources"
+resource_group_name = "prod-resources2"
