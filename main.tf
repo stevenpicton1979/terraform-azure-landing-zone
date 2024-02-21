@@ -47,7 +47,7 @@ module "enterprise_scale" {
   }
   
   root_parent_id = data.azurerm_client_config.core.tenant_id
-  root_id        = "charli-app"
+  root_id        = "charli-app2"
   root_name      = "Non-Prod"
   #deploy_connectivity_resources = true
   #deploy_management_resources = true
