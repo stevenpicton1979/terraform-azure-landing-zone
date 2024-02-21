@@ -26,7 +26,7 @@ jobs:
     - name: 'Setup Terraform'
       uses: hashicorp/setup-terraform@v3.0.0
       with:
-        terraform_version: 1.1.7
+        terraform_version: 1.7.3
 
     - name: 'Set TF_VARS_PATH and TF_BACKEND_CONFIG_PATH'
       run: |
