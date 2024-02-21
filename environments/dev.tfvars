@@ -1,1 +1,1 @@
-resource_group_name = "dev-resources"
+resource_group_name = "dev-resources2"
