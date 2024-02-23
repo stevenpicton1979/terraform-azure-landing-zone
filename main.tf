@@ -103,6 +103,6 @@ module "enterprise_scale" {
   subscription_id_connectivity  = data.azurerm_client_config.connectivity.subscription_id
 
   # Enable deployment of the identity resources
-  #subscription_id_identity  = data.azurerm_client_config.identity.subscription_id
+  subscription_id_identity  = data.azurerm_client_config.identity.subscription_id
 }
 
