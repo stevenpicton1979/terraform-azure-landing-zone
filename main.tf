@@ -2,8 +2,8 @@
 terraform {
 
   backend "azurerm" {
-    resource_group_name  = "rg-tfstate-prod-australiaeast"
-    storage_account_name = "tfstateprode001"
+    resource_group_name  = "rg-tfstate-devops-australiaeast"
+    storage_account_name = "tfstatedevopse001"
     container_name       = "tfstate"
     key                  = "terraform.tfstate"
   }
@@ -11,29 +11,70 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.74.0"
+      version = ">= 3.74.0"
+      configuration_aliases = [
+        azurerm.connectivity,
+        azurerm.management,
+        azurerm.identity
+      ]
     }
   }
-
-  required_version = ">= 1.1.0"
 }
+
+# Declare a standard provider block using your preferred configuration.
+# This will be used for the deployment of all "Core resources".
 
 provider "azurerm" {
   features {}
 }
 
+# Declare an aliased provider block using your preferred configuration.
+# This will be used for the deployment of all "Connectivity resources" to the specified `subscription_id`.
+
 provider "azurerm" {
-  alias    = "connectivity"
+  alias           = "connectivity"
+  subscription_id = var.connectivity_subscription
   features {}
 }
 
+# Declare a standard provider block using your preferred configuration.
+# This will be used for the deployment of all "Management resources" to the specified `subscription_id`.
+
 provider "azurerm" {
-  alias    = "management"
+  alias           = "management"
+  subscription_id = var.management_subscription
   features {}
 }
 
+# Declare a standard provider block using your preferred configuration.
+# This will be used for the deployment of all "Identity resources" to the specified `subscription_id`.
 
-data "azurerm_client_config" "core" {}
+provider "azurerm" {
+  alias           = "identity"
+  subscription_id = var.identity_subscription
+  features {}
+}
+
+# Obtain client configuration from the un-aliased provider
+data "azurerm_client_config" "core" {
+  provider = azurerm
+}
+
+# Obtain client configuration from the aliased 'management' provider
+data "azurerm_client_config" "management" {
+  provider = azurerm.management
+}
+
+# Obtain client configuration from the aliased 'connectivity' provider
+data "azurerm_client_config" "connectivity" {
+  provider = azurerm.connectivity
+}
+
+# Obtain client configuration from the aliased 'connectivity' provider
+data "azurerm_client_config" "identity" {
+  provider = azurerm.identity
+}
+
 module "enterprise_scale" {
   source  = "Azure/caf-enterprise-scale/azurerm"
   version = "5.1.0"
@@ -46,10 +87,22 @@ module "enterprise_scale" {
     azurerm.management   = azurerm.management
   }
   
+   # Set the required input variable `root_parent_id` using the Tenant ID from the un-aliased provider
+  root_id        = "np-charli"
+  root_name      = "Non Prod Charli"
   root_parent_id = data.azurerm_client_config.core.tenant_id
-  root_id        = "charli-app2"
-  root_name      = "Non-Prod"
-  #deploy_connectivity_resources = true
-  #deploy_management_resources = true
+
+  # Enable deployment of the management resources, using the management
+  # aliased provider to populate the correct Subscription ID
+  deploy_management_resources = true
+  subscription_id_management  = data.azurerm_client_config.management.subscription_id
+
+  # Enable deployment of the connectivity resources, using the connectivity
+  # aliased provider to populate the correct Subscription ID
+  deploy_connectivity_resources = true
+  subscription_id_connectivity  = data.azurerm_client_config.connectivity.subscription_id
+
+  # Enable deployment of the identity resources
+  #subscription_id_identity  = data.azurerm_client_config.identity.subscription_id
 }
 
