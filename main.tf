@@ -88,8 +88,8 @@ module "enterprise_scale" {
   }
   
    # Set the required input variable `root_parent_id` using the Tenant ID from the un-aliased provider
-  root_id        = "np-charli"
-  root_name      = "Non Prod Charli"
+  root_id        = "platform"
+  root_name      = "Platform"
   root_parent_id = data.azurerm_client_config.core.tenant_id
 
   # Enable deployment of the management resources, using the management

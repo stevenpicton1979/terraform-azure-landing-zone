@@ -1,3 +1,3 @@
-connectivity_subscription_id = "52c5afa3-091f-4214-8ec9-4d75fa3ee44c"
-management_subscription_id = "6671907b-e59b-43b8-9cac-84023e72c6bf"
-identity_subscription_id = "d892f1ed-0aac-437e-b336-d065e690467b"
+connectivity_subscription_id = "0b5ff202-f703-4fec-bff4-1cddca59444f"
+management_subscription_id = "27eda016-f8a9-4695-b003-05cc75606fd4"
+identity_subscription_id = "e96c6441-9d44-4bb7-a96a-43bee1fca8b4"
